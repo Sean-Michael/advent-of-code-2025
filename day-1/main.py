@@ -4,12 +4,15 @@ We have `input.txt` which contains the instructions for turning a dial to a safe
 
 """
 
+import sys
+
 DEBUG = True
 
 
 def main():
+    file_name = sys.argv[1]
 
-    with open("input.txt") as instructions:
+    with open(file_name) as instructions:
         rotations = [line.rstrip("\n") for line in instructions]
 
         # The dial starts by pointing at 50
