@@ -10,9 +10,13 @@ def main():
     DIAL = 50
 
     with open('input.txt') as instructions:
-        steps = (line.rstrip('\n') for line in instructions)
-        for line in steps:
-            print(line)
+        rotations = list(line.rstrip('\n') for line in instructions)
+
+        for r in rotations:
+            if 'R' in r[0]:
+                print(f"RIGHT: {r[1:]}")
+            else:
+                print(f"LEFT: {r[1:]}")
 
 if __name__ == "__main__":
     main()
