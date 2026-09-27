@@ -48,28 +48,22 @@ def main():
 
         for r in rotations:
             PREV_DIAL = DIAL
+            turn = int(r[1:])
             if "R" in r[0]:
-                DIAL += int(r[1:])
+                DIAL += turn
+                cycles, index = divmod(DIAL, 100)
+                ZERO_COUNT += cycles
+                DIAL = index
             else:
-                DIAL -= int(r[1:])
-
-            cycles, index = divmod(DIAL, 100)
+                DIAL = (100 - DIAL) % 100 + turn
+                cycles, index = divmod(DIAL, 100)
+                ZERO_COUNT += cycles
+                DIAL = (PREV_DIAL - turn) % 100
 
             log(f"- DIAL_START: {PREV_DIAL}")
             log(f"- DIAL_ROTATED: {r} to {index}")
 
             # Increment based on the quotient
-            ZERO_COUNT += abs(cycles)
-
-            # if we started at zero, and went left
-            if PREV_DIAL == 0 and cycles < 0:
-                ZERO_COUNT -= 1  # the first 'cycle' doesn't count
-
-            # if we land on zero without a full rotation
-            if cycles == 0 and index == 0:
-                ZERO_COUNT += 1
-
-            DIAL = index
 
         print(ZERO_COUNT)
 
