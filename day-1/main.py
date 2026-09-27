@@ -54,18 +54,20 @@ def main():
                 DIAL -= int(r[1:])
 
             cycles, index = divmod(DIAL, 100)
-            # log(f"divmod({DIAL}, 100), cycle={cycles}, index={index}")
 
             log(f"- DIAL_START: {PREV_DIAL}")
             log(f"- DIAL_ROTATED: {r} to {index}")
 
-            # If we landed on 0, check how many rotations got us here
-            if index == 0 and abs(cycles) > 1:
-                ZERO_COUNT += abs(cycles)
-                log(f"B) points at zero {abs(cycles)} times")
-            elif abs(cycles) > 0:
-                ZERO_COUNT += abs(cycles)
-                log(f"C) points at zero {abs(cycles)} times")
+            # Increment based on the quotient
+            ZERO_COUNT += abs(cycles)
+
+            # if we started at zero, and went left
+            if PREV_DIAL == 0 and cycles < 0:
+                ZERO_COUNT -= 1  # the first 'cycle' doesn't count
+
+            # if we land on zero without a full rotation
+            if cycles == 0 and index == 0:
+                ZERO_COUNT += 1
 
             DIAL = index
 
