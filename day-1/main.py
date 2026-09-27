@@ -14,6 +14,7 @@ def main():
 
         # The dial starts by pointing at 50
         DIAL = 50
+        ZERO_COUNT = 0
 
         if DEBUG:
             print(f"DIAL START: {DIAL}")
@@ -21,18 +22,17 @@ def main():
             if "R" in r[0]:
                 DIAL += int(r[1:])
                 if DEBUG:
-                    print(f"RIGHT {r[1:]}, DIAL {DIAL}")
-                if DIAL > 99:
-                    DIAL = DIAL - 100
+                    print(f"RIGHT {r[1:]}")
             else:
                 DIAL -= int(r[1:])
                 if DEBUG:
-                    print(f"LEFT {r[1:]}, DIAL {DIAL}")
-                if DIAL < 1:
-                    DIAL = DIAL + 100
+                    print(f"LEFT {r[1:]}")
+            DIAL = DIAL % 100
             if DEBUG:
                 print(f"DIAL:{DIAL}")
-        print(f"FINAL DIAL POSITION: {DIAL}")
+            if DIAL == 0:
+                ZERO_COUNT += 1
+        print(ZERO_COUNT)
 
 
 if __name__ == "__main__":
