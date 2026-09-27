@@ -8,11 +8,6 @@ import sys
 DEBUG = True
 
 
-def log(message: str) -> None:
-    if DEBUG:
-        print(message)
-
-
 def main():
     file_name = sys.argv[1]
 
@@ -25,8 +20,10 @@ def main():
 
         for r in rotations:
             prev_dial = dial
+            direction = r[0]
             turn = int(r[1:])
-            if "R" in r[0]:
+
+            if direction == "R":
                 dial += turn
                 cycles, index = divmod(dial, 100)
                 zero_count += cycles
@@ -37,8 +34,8 @@ def main():
                 zero_count += cycles
                 dial = (prev_dial - turn) % 100
 
-            log(f"- DIAL_START: {prev_dial}")
-            log(f"- DIAL_ROTATED: {r} to {index}")
+            if DEBUG:
+                print(f"- DIAL_START: {prev_dial}\n- DIAL_ROTATED: {r} to {index}")
 
         print(zero_count)
 
