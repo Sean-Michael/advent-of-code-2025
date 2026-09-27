@@ -1,34 +1,11 @@
 """
 We need to get the secret code to enter the door.
 We have `input.txt` which contains the instructions for turning a dial to a safe.
-
 """
 
 import sys
 
 DEBUG = True
-
-
-"""
-    The cases that increase the zero count:
-    1. We land on Zero
-    2. We pass zero during a rotation
-
-    Landing on Zero means that DIAL == 0 after calculating quotient - easy
-    Passing zero can happen in a few more cases:
-        i.) A full rotation passes zero as many times as rotated, this is the quotient
-        ii.) A partial rotation from left or right halves of the dial, this is trickier .. 
-            Going right, this is also when the quotient is nonzero since we use the remainder to find the index
-            Going left, it's negative but the absolute value should help us there..  
-
-    So how to not double count ..
-    - if we started on 0 we don't count that zero, but if we do a full rotation and land on zero, just count that once
-    - if we do multiple full rotations and land on zero at the end, count the intermediate
-    - so only count the cycles as zero count if we land on zero if they are greater than 1
-    - like two rotations, starting from a previous zero index, and ending on zero would add two to the count, not 4 or 3
-    - so count a full cycle only if the ending index is zero
-    - Do we even need to count the previous zero? i actually don't think so, cause if we end up with DIAL there again, it's rigth
-"""
 
 
 def log(message: str) -> None:
@@ -43,29 +20,27 @@ def main():
         rotations = [line.rstrip("\n") for line in instructions]
 
         # The dial starts by pointing at 50
-        DIAL = 50
-        ZERO_COUNT = 0
+        dial = 50
+        zero_count = 0
 
         for r in rotations:
-            PREV_DIAL = DIAL
+            prev_dial = dial
             turn = int(r[1:])
             if "R" in r[0]:
-                DIAL += turn
-                cycles, index = divmod(DIAL, 100)
-                ZERO_COUNT += cycles
-                DIAL = index
+                dial += turn
+                cycles, index = divmod(dial, 100)
+                zero_count += cycles
+                dial = index
             else:
-                DIAL = (100 - DIAL) % 100 + turn
-                cycles, index = divmod(DIAL, 100)
-                ZERO_COUNT += cycles
-                DIAL = (PREV_DIAL - turn) % 100
+                dial = (100 - dial) % 100 + turn
+                cycles, index = divmod(dial, 100)
+                zero_count += cycles
+                dial = (prev_dial - turn) % 100
 
-            log(f"- DIAL_START: {PREV_DIAL}")
+            log(f"- DIAL_START: {prev_dial}")
             log(f"- DIAL_ROTATED: {r} to {index}")
 
-            # Increment based on the quotient
-
-        print(ZERO_COUNT)
+        print(zero_count)
 
 
 if __name__ == "__main__":
